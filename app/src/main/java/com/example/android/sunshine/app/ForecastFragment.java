@@ -78,6 +78,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     static final int COL_WEATHER_CONDITION_ID = 6;
     static final int COL_COORD_LAT = 7;
     static final int COL_COORD_LONG = 8;
+    private TextView mEmptyView;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -143,8 +144,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.listview_forecast);
-//        View emptyView = rootView.findViewById(R.id.listview_forecast_empty);
-//        mRecyclerView.setEmptyView(emptyView);
+        mEmptyView = (TextView) rootView.findViewById(R.id.listview_forecast_empty);
         mRecyclerView.setAdapter(mForecastAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -257,27 +257,29 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     @SuppressLint("SwitchIntDef")
     private void updateEmptyView() {
         if (mForecastAdapter.getItemCount() == 0) {
-            @SuppressWarnings("ConstantConditions") TextView tv = (TextView) getView().findViewById(R.id.listview_forecast_empty);
-            if (null != tv) {
-                int message = R.string.empty_forecast_list;
-                @SunshineSyncAdapter.LocationStatus int location = Utility.getLocationStatus(getActivity());
-                switch (location) {
-                    case SunshineSyncAdapter.LOCATION_STATUS_SERVER_DOWN:
-                        message = R.string.empty_forecast_list_server_down;
-                        break;
-                    case SunshineSyncAdapter.LOCATION_STATUS_SERVER_INVALID:
-                        message = R.string.empty_forecast_list_server_error;
-                        break;
-                    case SunshineSyncAdapter.LOCATION_STATUS_INVALID:
-                        message = R.string.empty_forecast_list_invalid_location;
-                        break;
-                    default:
-                        if (!Utility.isNetworkAvailable(getActivity())) {
-                            message = R.string.empty_forecast_list_no_network;
-                        }
-                }
-                tv.setText(message);
+            int message = R.string.empty_forecast_list;
+            @SunshineSyncAdapter.LocationStatus int location = Utility.getLocationStatus(getActivity());
+            switch (location) {
+                case SunshineSyncAdapter.LOCATION_STATUS_SERVER_DOWN:
+                    message = R.string.empty_forecast_list_server_down;
+                    break;
+                case SunshineSyncAdapter.LOCATION_STATUS_SERVER_INVALID:
+                    message = R.string.empty_forecast_list_server_error;
+                    break;
+                case SunshineSyncAdapter.LOCATION_STATUS_INVALID:
+                    message = R.string.empty_forecast_list_invalid_location;
+                    break;
+                default:
+                    if (!Utility.isNetworkAvailable(getActivity())) {
+                        message = R.string.empty_forecast_list_no_network;
+                    }
             }
+            mEmptyView.setText(message);
+            mEmptyView.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.INVISIBLE);
+        } else {
+            mEmptyView.setVisibility(View.INVISIBLE);
+            mRecyclerView.setVisibility(View.VISIBLE);
         }
     }
 
