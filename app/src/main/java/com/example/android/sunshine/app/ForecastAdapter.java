@@ -38,7 +38,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
     private Cursor mCursor;
 
     private ForecastAdapterClickHandler mClickHandler;
-    private View mEmptyView;
+    private final View mEmptyView;
 
     private static final int VIEW_TYPE_COUNT = 2;
     private static final int VIEW_TYPE_TODAY = 0;
@@ -51,10 +51,11 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
         void onClick(long date, ViewHolder holder);
     }
 
-    public ForecastAdapter(Context context, Cursor c, ForecastAdapterClickHandler clickHandler) {
+    public ForecastAdapter(Context context, Cursor c, ForecastAdapterClickHandler clickHandler, View emptyView) {
         mCursor = c;
         mContext = context;
         mClickHandler = clickHandler;
+        mEmptyView = emptyView;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -170,18 +171,6 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
     public void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
-
-//        if (mEmptyView != null) {
-//            if (getItemCount() == 0) {
-//                mEmptyView.setVisibility(View.VISIBLE);
-//            } else {
-//                mEmptyView.setVisibility(View.INVISIBLE);
-//            }
-//        }
+        mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE: View.INVISIBLE);
     }
-
-    public void setEmptyView(TextView emptyView) {
-        mEmptyView = emptyView;
-    }
-
 }

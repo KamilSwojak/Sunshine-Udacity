@@ -155,9 +155,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                                 .buildWeatherLocationWithDate(locationSetting, date));
             }
         };
-        mForecastAdapter = new ForecastAdapter(getActivity(), null, clickHandler);
+        mForecastAdapter = new ForecastAdapter(getActivity(), null, clickHandler, mEmptyView);
         mRecyclerView.setAdapter(mForecastAdapter);
-        mForecastAdapter.setEmptyView(mEmptyView);
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
