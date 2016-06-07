@@ -119,7 +119,6 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
         if (mCursor == null) return;
 
         boolean selected = mCurrentlySelected == position;
-        Log.d(TAG, "onBindViewHolder: " + selected);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             holder.itemView.setActivated(selected);
         }
