@@ -35,6 +35,10 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
 
     private final Context mContext;
     private Cursor mCursor;
+
+    private ForecastAdapterClickHandler mClickHandler;
+    private View mEmptyView;
+
     private static final int VIEW_TYPE_COUNT = 2;
     private static final int VIEW_TYPE_TODAY = 0;
     private static final int VIEW_TYPE_FUTURE_DAY = 1;
@@ -42,11 +46,22 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
     // Flag to determine if we want to use a separate view for "today".
     private boolean mUseTodayLayout = true;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public interface ForecastAdapterClickHandler {
+        void onClick(long date, ViewHolder holder);
+    }
+
+    public ForecastAdapter(Context context, Cursor c, ForecastAdapterClickHandler clickHandler) {
+        mCursor = c;
+        mContext = context;
+        mClickHandler = clickHandler;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public final ImageView iconView;
         public final TextView dateView;
         public final TextView descriptionView;
         public final TextView highTempView;
+
         public final TextView lowTempView;
 
         public ViewHolder(View view) {
@@ -57,11 +72,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
             highTempView = (TextView) view.findViewById(R.id.list_item_high_textview);
             lowTempView = (TextView) view.findViewById(R.id.list_item_low_textview);
         }
-    }
 
-    public ForecastAdapter(Context context, Cursor c, int flags) {
-        mContext = context;
-        mCursor = c;
     }
 
     public void setUseTodayLayout(boolean useTodayLayout) {
@@ -87,7 +98,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ForecastAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final ForecastAdapter.ViewHolder holder, int position) {
         if (mCursor == null) return;
 
         mCursor.moveToPosition(position);
@@ -114,7 +125,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
                 .crossFade()
                 .into(holder.iconView);
 
-        long dateInMillis = mCursor.getLong(ForecastFragment.COL_WEATHER_DATE);
+        final long dateInMillis = mCursor.getLong(ForecastFragment.COL_WEATHER_DATE);
         holder.dateView.setText(Utility.getFriendlyDayString(mContext, dateInMillis));
 
         String description = Utility.getStringForWeatherCondition(mContext, weatherId);
@@ -130,6 +141,14 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
                 mContext, mCursor.getDouble(ForecastFragment.COL_WEATHER_MIN_TEMP));
         holder.lowTempView.setText(low);
         holder.lowTempView.setContentDescription(mContext.getString(R.string.a11y_low_temp, low));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mClickHandler.onClick(dateInMillis, holder);
+            }
+        });
+
     }
 
     @Override
@@ -151,5 +170,18 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
     public void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
+
+//        if (mEmptyView != null) {
+//            if (getItemCount() == 0) {
+//                mEmptyView.setVisibility(View.VISIBLE);
+//            } else {
+//                mEmptyView.setVisibility(View.INVISIBLE);
+//            }
+//        }
     }
+
+    public void setEmptyView(TextView emptyView) {
+        mEmptyView = emptyView;
+    }
+
 }
