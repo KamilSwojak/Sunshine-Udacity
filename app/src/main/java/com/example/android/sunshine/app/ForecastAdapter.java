@@ -17,8 +17,10 @@ package com.example.android.sunshine.app;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Build;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,7 @@ import com.example.android.sunshine.app.data.WeatherContract;
  * from a {@link Cursor} to a {@link android.widget.ListView}.
  */
 public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHolder> {
+    private static final String TAG = "ForecastAdapter";
 
     private final Context mContext;
     private Cursor mCursor;
@@ -46,6 +49,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
 
     // Flag to determine if we want to use a separate view for "today".
     private boolean mUseTodayLayout = true;
+    private int mCurrentlySelected = RecyclerView.NO_POSITION;
 
     public interface ForecastAdapterClickHandler {
         void onClick(long date, ViewHolder holder);
@@ -73,11 +77,15 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
             descriptionView = (TextView) view.findViewById(R.id.list_item_forecast_textview);
             highTempView = (TextView) view.findViewById(R.id.list_item_high_textview);
             lowTempView = (TextView) view.findViewById(R.id.list_item_low_textview);
+            view.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
+            notifyItemChanged(mCurrentlySelected);
+            mCurrentlySelected = position;
+            notifyItemChanged(mCurrentlySelected);
             mCursor.moveToPosition(position);
             long date = mCursor.getLong(mCursor.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_DATE));
             mClickHandler.onClick(date, this);
@@ -107,8 +115,14 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(final ForecastAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         if (mCursor == null) return;
+
+        boolean selected = mCurrentlySelected == position;
+        Log.d(TAG, "onBindViewHolder: " + selected);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            holder.itemView.setActivated(selected);
+        }
 
         mCursor.moveToPosition(position);
 
@@ -171,6 +185,6 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
     public void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
-        mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE: View.INVISIBLE);
+        mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.INVISIBLE);
     }
 }
