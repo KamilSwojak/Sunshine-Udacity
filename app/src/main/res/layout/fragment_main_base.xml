@@ -21,13 +21,13 @@
              tools:context="com.example.android.sunshine.app.ForecastFragment">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/listview_forecast"
+        android:id="@+id/recyclerview_forecast"
         style="@style/ForecastListStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <!-- empty list -->
     <TextView
-        android:id="@+id/listview_forecast_empty"
+        android:id="@+id/recyclerview_forecast_empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
