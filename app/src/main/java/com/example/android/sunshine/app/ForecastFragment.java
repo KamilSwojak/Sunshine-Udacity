@@ -153,6 +153,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                 ((Callback) getActivity())
                         .onItemSelected(WeatherContract.WeatherEntry
                                 .buildWeatherLocationWithDate(locationSetting, date));
+                mPosition = holder.getAdapterPosition();
             }
         };
         mForecastAdapter = new ForecastAdapter(getActivity(), null, clickHandler, mEmptyView);
