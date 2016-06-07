@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.android.sunshine.app.data.WeatherContract;
 
 /**
  * {@link ForecastAdapter} exposes a list of weather forecasts
@@ -56,7 +57,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
         mClickHandler = clickHandler;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final ImageView iconView;
         public final TextView dateView;
         public final TextView descriptionView;
@@ -73,6 +74,13 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
             lowTempView = (TextView) view.findViewById(R.id.list_item_low_textview);
         }
 
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            mCursor.moveToPosition(position);
+            long date = mCursor.getLong(mCursor.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_DATE));
+            mClickHandler.onClick(date, this);
+        }
     }
 
     public void setUseTodayLayout(boolean useTodayLayout) {
@@ -141,14 +149,6 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
                 mContext, mCursor.getDouble(ForecastFragment.COL_WEATHER_MIN_TEMP));
         holder.lowTempView.setText(low);
         holder.lowTempView.setContentDescription(mContext.getString(R.string.a11y_low_temp, low));
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mClickHandler.onClick(dateInMillis, holder);
-            }
-        });
-
     }
 
     @Override
