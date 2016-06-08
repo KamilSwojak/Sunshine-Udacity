@@ -188,9 +188,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                     float translationY = parallaxView.getTranslationY();
                     super.onScrolled(recyclerView, dx, dy);
                     if (dy > 0) {
-                        parallaxView.setTranslationY(Math.max(-max, parallaxView.getTranslationY() - dy * 0.5f));
+                        parallaxView.setTranslationY(Math.max(-max, translationY - dy * 0.5f));
                     } else {
-                        parallaxView.setTranslationY(Math.min(0, parallaxView.getTranslationY() - dy * 0.5f));
+                        parallaxView.setTranslationY(Math.min(0, translationY - dy * 0.5f));
                     }
                 }
             });
