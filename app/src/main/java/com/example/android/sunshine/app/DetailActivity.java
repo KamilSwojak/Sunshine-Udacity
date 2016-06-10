@@ -44,6 +44,8 @@ public class DetailActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.weather_detail_container, fragment)
                     .commit();
+
+            supportPostponeEnterTransition();
         }
     }
 }

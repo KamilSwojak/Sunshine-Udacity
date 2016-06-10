@@ -18,6 +18,7 @@ package com.example.android.sunshine.app;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Build;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -161,6 +162,8 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
                 mContext, mCursor.getDouble(ForecastFragment.COL_WEATHER_MIN_TEMP));
         holder.lowTempView.setText(low);
         holder.lowTempView.setContentDescription(mContext.getString(R.string.a11y_low_temp, low));
+
+        ViewCompat.setTransitionName(holder.iconView, "iconView" + position);
     }
 
     @Override
