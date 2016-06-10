@@ -95,7 +95,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         /**
          * DetailFragmentCallback for when an item has been selected.
          */
-        void onItemSelected(Uri dateUri);
+        void onItemSelected(Uri dateUri, ForecastAdapter.ViewHolder holder);
     }
 
     public ForecastFragment() {
@@ -170,7 +170,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                 String locationSetting = Utility.getPreferredLocation(getActivity());
                 ((Callback) getActivity())
                         .onItemSelected(WeatherContract.WeatherEntry
-                                .buildWeatherLocationWithDate(locationSetting, date));
+                                .buildWeatherLocationWithDate(locationSetting, date), holder);
                 mPosition = holder.getAdapterPosition();
             }
         };
