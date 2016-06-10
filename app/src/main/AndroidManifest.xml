@@ -41,6 +41,10 @@
         android:protectionLevel="signature"/>
     <uses-permission android:name="com.example.android.sunshine.app.permission.C2D_MESSAGE"/>
 
+    <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="GOOGLE_API_KEY"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -53,7 +57,6 @@
             android:theme="@style/AppTheme.Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
