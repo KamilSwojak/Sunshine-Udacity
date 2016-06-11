@@ -36,6 +36,9 @@
     <string name="title_activity_detail">Details</string>
     <string name="title_activity_settings">Settings</string>
 
+    <!--Content description for current location image-->
+    <string name="pref_current_location_desc">Current location</string>
+
     <!-- Label for the location preference [CHAR LIMIT=30] -->
     <string name="pref_location_label">Location</string>
 
