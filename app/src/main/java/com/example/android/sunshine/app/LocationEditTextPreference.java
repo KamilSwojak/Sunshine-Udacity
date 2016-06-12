@@ -18,6 +18,7 @@ package com.example.android.sunshine.app;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -33,10 +34,16 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 
 public class LocationEditTextPreference extends EditTextPreference {
     static final private int DEFAULT_MINIMUM_LOCATION_LENGTH = 2;
     private int mMinLength;
+
+    public static int PLACES_PICKER_REQUEST = 1;
 
     public LocationEditTextPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -64,7 +71,16 @@ public class LocationEditTextPreference extends EditTextPreference {
             currentLocation.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                    if (getContext() instanceof SettingsActivity) {
+                        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                        try {
+                            Intent intent = builder.build(((SettingsActivity) getContext()));
+                            ((SettingsActivity) getContext()).startActivityForResult(intent, PLACES_PICKER_REQUEST);
+                        } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                 }
             });
         }
