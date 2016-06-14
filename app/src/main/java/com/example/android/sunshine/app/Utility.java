@@ -15,6 +15,7 @@
  */
 package com.example.android.sunshine.app;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -30,10 +31,56 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Utility {
+    private static final float DEFAULT_LAT_LONG = 0f;
+
     public static String getPreferredLocation(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(context.getString(R.string.pref_location_key),
                 context.getString(R.string.pref_location_default));
+    }
+
+    public static void setPreferredLocation(Context context, String location) {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        editor.putString(context.getString(R.string.pref_location_key), location);
+        editor.commit();
+    }
+
+    public static boolean isLatLongAvailable(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        float lat = prefs.getFloat(context.getString(R.string.pref_location_latitude_key), DEFAULT_LAT_LONG);
+        float lon = prefs.getFloat(context.getString(R.string.pref_location_longitude_key), DEFAULT_LAT_LONG);
+        return lat != DEFAULT_LAT_LONG && lon != DEFAULT_LAT_LONG;
+    }
+
+    @SuppressLint("CommitPrefEdits")
+    public static void setLocationLatitude(Context context, float lat) {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        editor.putFloat(context.getString(R.string.pref_location_latitude_key), lat);
+        editor.commit();
+    }
+
+    @SuppressLint("CommitPrefEdits")
+    public static void setLocationLongitude(Context context, float lon) {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        editor.putFloat(context.getString(R.string.pref_location_longitude_key), lon);
+        editor.commit();
+    }
+
+    public static float getLocationLatitude(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getFloat(context.getString(R.string.pref_location_latitude_key), DEFAULT_LAT_LONG);
+    }
+
+    public static float getLocationLongitude(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getFloat(context.getString(R.string.pref_location_longitude_key), DEFAULT_LAT_LONG);
+    }
+
+    public static void resetLocationLatLong(Context context) {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        editor.putFloat(context.getString(R.string.pref_location_latitude_key), DEFAULT_LAT_LONG);
+        editor.putFloat(context.getString(R.string.pref_location_longitude_key), DEFAULT_LAT_LONG);
+        editor.commit();
     }
 
     public static boolean isMetric(Context context) {
@@ -68,7 +115,7 @@ public class Utility {
      * Helper method to convert the database representation of the date into something to display
      * to users.  As classy and polished a user experience as "20140102" is, we can do better.
      *
-     * @param context Context to use for resource localization
+     * @param context      Context to use for resource localization
      * @param dateInMillis The date in milliseconds
      * @return a user-friendly representation of the date.
      */
@@ -94,7 +141,7 @@ public class Utility {
                     formatId,
                     today,
                     getFormattedMonthDay(context, dateInMillis)));
-        } else if ( julianDay < currentJulianDay + 7 ) {
+        } else if (julianDay < currentJulianDay + 7) {
             // If the input date is less than a week in the future, just return the day name.
             return getDayName(context, dateInMillis);
         } else {
@@ -108,7 +155,7 @@ public class Utility {
      * Helper method to convert the database representation of the date into something to display
      * to users.  As classy and polished a user experience as "20140102" is, we can do better.
      *
-     * @param context Context to use for resource localization
+     * @param context      Context to use for resource localization
      * @param dateInMillis The date in milliseconds
      * @return a user-friendly representation of the date.
      */
@@ -126,7 +173,7 @@ public class Utility {
      * Given a day, returns just the name to use for that day.
      * E.g "today", "tomorrow", "wednesday".
      *
-     * @param context Context to use for resource localization
+     * @param context      Context to use for resource localization
      * @param dateInMillis The date in milliseconds
      * @return
      */
@@ -140,7 +187,7 @@ public class Utility {
         int currentJulianDay = Time.getJulianDay(System.currentTimeMillis(), t.gmtoff);
         if (julianDay == currentJulianDay) {
             return context.getString(R.string.today);
-        } else if ( julianDay == currentJulianDay +1 ) {
+        } else if (julianDay == currentJulianDay + 1) {
             return context.getString(R.string.tomorrow);
         } else {
             Time time = new Time();
@@ -153,12 +200,13 @@ public class Utility {
 
     /**
      * Converts db date format to the format "Month day", e.g "June 24".
-     * @param context Context to use for resource localization
+     *
+     * @param context      Context to use for resource localization
      * @param dateInMillis The db formatted date string, expected to be of the form specified
-     *                in Utility.DATE_FORMAT
+     *                     in Utility.DATE_FORMAT
      * @return The day in the form of a string formatted "December 6"
      */
-    public static String getFormattedMonthDay(Context context, long dateInMillis ) {
+    public static String getFormattedMonthDay(Context context, long dateInMillis) {
         Time time = new Time();
         time.setToNow();
         SimpleDateFormat dbDateFormat = new SimpleDateFormat(Utility.DATE_FORMAT);
@@ -203,6 +251,7 @@ public class Utility {
     /**
      * Helper method to provide the icon resource id according to the weather condition id returned
      * by the OpenWeatherMap call.
+     *
      * @param weatherId from OpenWeatherMap API response
      * @return resource id for the corresponding icon. -1 if no relation is found.
      */
@@ -252,7 +301,7 @@ public class Utility {
      * Helper method to provide the art urls according to the weather condition id returned
      * by the OpenWeatherMap call.
      *
-     * @param context Context to use for retrieving the URL format
+     * @param context   Context to use for retrieving the URL format
      * @param weatherId from OpenWeatherMap API response
      * @return url for the corresponding weather artwork. null if no relation is found.
      */
@@ -292,6 +341,7 @@ public class Utility {
     /**
      * Helper method to provide the art resource id according to the weather condition id returned
      * by the OpenWeatherMap call.
+     *
      * @param weatherId from OpenWeatherMap API response
      * @return resource id for the corresponding icon. -1 if no relation is found.
      */
@@ -327,7 +377,8 @@ public class Utility {
     /**
      * Helper method to provide the string according to the weather
      * condition id returned by the OpenWeatherMap call.
-     * @param context Android context
+     *
+     * @param context   Android context
      * @param weatherId from OpenWeatherMap API response
      * @return string for the weather condition. null if no relation is found.
      */
@@ -339,7 +390,7 @@ public class Utility {
             stringId = R.string.condition_2xx;
         } else if (weatherId >= 300 && weatherId <= 321) {
             stringId = R.string.condition_3xx;
-        } else switch(weatherId) {
+        } else switch (weatherId) {
             case 500:
                 stringId = R.string.condition_500;
                 break;
@@ -510,7 +561,7 @@ public class Utility {
      */
     static public boolean isNetworkAvailable(Context c) {
         ConnectivityManager cm =
-                (ConnectivityManager)c.getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null &&
@@ -518,22 +569,23 @@ public class Utility {
     }
 
     /**
-     *
      * @param c Context used to get the SharedPreferences
      * @return the location status integer type
      */
     @SuppressWarnings("ResourceType")
-    static public @SunshineSyncAdapter.LocationStatus
-    int getLocationStatus(Context c){
+    static public
+    @SunshineSyncAdapter.LocationStatus
+    int getLocationStatus(Context c) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         return sp.getInt(c.getString(R.string.pref_location_status_key), SunshineSyncAdapter.LOCATION_STATUS_UNKNOWN);
     }
 
     /**
      * Resets the location status.  (Sets it to SunshineSyncAdapter.LOCATION_STATUS_UNKNOWN)
+     *
      * @param c Context used to get the SharedPreferences
      */
-    static public void resetLocationStatus(Context c){
+    static public void resetLocationStatus(Context c) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor spe = sp.edit();
         spe.putInt(c.getString(R.string.pref_location_status_key), SunshineSyncAdapter.LOCATION_STATUS_UNKNOWN);

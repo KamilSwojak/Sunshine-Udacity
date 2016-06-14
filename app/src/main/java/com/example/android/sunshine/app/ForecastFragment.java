@@ -24,6 +24,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -185,12 +186,12 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         final View parallaxView = rootView.findViewById(R.id.parallax_bar);
         if (parallaxView != null) {
             mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+                @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
                     int max = parallaxView.getHeight();
                     float translationY = parallaxView.getTranslationY();
-                    super.onScrolled(recyclerView, dx, dy);
                     if (dy > 0) {
                         parallaxView.setTranslationY(Math.max(-max, translationY - dy * 0.5f));
                     } else {
@@ -199,6 +200,25 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                 }
             });
         }
+
+        final AppBarLayout appBar = (AppBarLayout) rootView.findViewById(R.id.appbar);
+        if (appBar != null) {
+            ViewCompat.setElevation(appBar, 0);
+            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if (mRecyclerView.computeVerticalScrollOffset() == 0) {
+                        appBar.setElevation(0f);
+                    } else {
+                        float targetElevation = appBar.getTargetElevation();
+                        appBar.setElevation(targetElevation);
+                    }
+                }
+            });
+        }
+
         return rootView;
     }
 
