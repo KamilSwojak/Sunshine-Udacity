@@ -113,20 +113,33 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             final String FORECAST_BASE_URL =
                     "http://api.openweathermap.org/data/2.5/forecast/daily?";
             final String QUERY_PARAM = "q";
+            final String LAT_PARAM = "q";
+            final String LON_PARAM = "q";
             final String FORMAT_PARAM = "mode";
             final String UNITS_PARAM = "units";
             final String DAYS_PARAM = "cnt";
             final String APPID_PARAM = "APPID";
 
-            Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
-                    .appendQueryParameter(QUERY_PARAM, locationQuery)
-                    .appendQueryParameter(FORMAT_PARAM, format)
+            Uri.Builder builder = Uri.parse(FORECAST_BASE_URL).buildUpon();
+
+            if (Utility.isLatLongAvailable(getContext())) {
+                float latitude = Utility.getLocationLatitude(getContext());
+                float longitude = Utility.getLocationLongitude(getContext());
+                builder.appendQueryParameter(LAT_PARAM, String.valueOf(latitude));
+                builder.appendQueryParameter(LON_PARAM, String.valueOf(longitude));
+            } else {
+                builder.appendQueryParameter(QUERY_PARAM, locationQuery);
+            }
+
+            Uri uri = builder.appendQueryParameter(FORMAT_PARAM, format)
                     .appendQueryParameter(UNITS_PARAM, units)
                     .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
                     .appendQueryParameter(APPID_PARAM, BuildConfig.OPEN_WEATHER_MAP_API_KEY)
                     .build();
 
-            URL url = new URL(builtUri.toString());
+            System.out.println(uri);
+
+            URL url = new URL(uri.toString());
 
             // Create the request to OpenWeatherMap, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -184,7 +197,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     /**
      * Take the String representing the complete forecast in JSON Format and
      * pull out the data we need to construct the Strings needed for the wireframes.
-     * <p/>
+     * <p>
      * Fortunately parsing is easy:  constructor takes the JSON string and converts it
      * into an Object hierarchy for us.
      */

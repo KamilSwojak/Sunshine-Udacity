@@ -166,9 +166,15 @@ public class SettingsActivity extends PreferenceActivity
             if (resultCode == Activity.RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
                 String address = place.getAddress().toString();
-                setPreferenceSummary(findPreference(getString(R.string.pref_location_key)), address);
+                Utility.setPreferredLocation(this, address);
 
-                System.out.println(Utility.getPreferredLocation(getApplication()));
+                System.out.println(place.getLatLng().latitude);
+                System.out.println(place.getLatLng().longitude);
+                Utility.putLocationLatitude(this, (float) place.getLatLng().latitude);
+                Utility.putLocationLongitude(this, (float) place.getLatLng().longitude);
+                System.out.println(Utility.isLatLongAvailable(this));
+                Utility.resetLocationStatus(this);
+                SunshineSyncAdapter.syncImmediately(this);
             }
 
         }

@@ -45,6 +45,12 @@
     <!-- Key name for storing location in SharedPreferences [CHAR LIMIT=NONE] -->
     <string name="pref_location_key" translatable="false">location</string>
 
+    <!-- Key name for storing location latitude in SharedPreferences [CHAR LIMIT=NONE] -->
+    <string name="pref_location_latitude_key" translatable="false">location-lat</string>
+
+    <!-- Key name for storing location longitude in SharedPreferences [CHAR LIMIT=NONE] -->
+    <string name="pref_location_longitude_key" translatable="false">location-lon</string>
+
     <!-- Key name for storing location status in SharedPreferences -->
     <string name="pref_location_status_key" translatable="false">loc-status</string>
 
