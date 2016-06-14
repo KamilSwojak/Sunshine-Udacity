@@ -25,12 +25,15 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+
+import java.util.Locale;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings.
@@ -166,13 +169,17 @@ public class SettingsActivity extends PreferenceActivity
             if (resultCode == Activity.RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
                 String address = place.getAddress().toString();
+
+                if (TextUtils.isEmpty(address)) {
+                    address = String.format(Locale.getDefault(), "(%.2f,%.2f)",
+                            place.getLatLng().latitude, place.getLatLng().longitude);
+                }
+
                 Utility.setPreferredLocation(this, address);
 
-                System.out.println(place.getLatLng().latitude);
-                System.out.println(place.getLatLng().longitude);
                 Utility.putLocationLatitude(this, (float) place.getLatLng().latitude);
                 Utility.putLocationLongitude(this, (float) place.getLatLng().longitude);
-                System.out.println(Utility.isLatLongAvailable(this));
+
                 Utility.resetLocationStatus(this);
                 SunshineSyncAdapter.syncImmediately(this);
             }
