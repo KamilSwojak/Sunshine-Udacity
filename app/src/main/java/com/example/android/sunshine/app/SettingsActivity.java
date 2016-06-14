@@ -25,8 +25,11 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
-import android.widget.Toast;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
@@ -46,6 +49,9 @@ import java.util.Locale;
 public class SettingsActivity extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private static final String TAG = "SettingsActivity";
+    private ImageView mAttribution;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +63,17 @@ public class SettingsActivity extends PreferenceActivity
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_units_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_art_pack_key)));
+
+        mAttribution = new ImageView(this);
+        mAttribution.setImageResource(R.drawable.powered_by_google_light);
+
+        mAttribution.setVisibility(Utility.isLatLongAvailable(this) ? View.VISIBLE : View.INVISIBLE);
+
+        if (mAttribution != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                setListFooter(mAttribution);
+            }
+        }
     }
 
     // Registers a shared preference change listener that gets notified when preferences change
@@ -91,7 +108,15 @@ public class SettingsActivity extends PreferenceActivity
                         .getString(preference.getKey(), ""));
     }
 
+    // This gets called before the preference is changed
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object value) {
+        setPreferenceSummary(preference, value);
+        return true;
+    }
+
     private void setPreferenceSummary(Preference preference, Object value) {
+        Log.d(TAG, "setPreferenceSummary() called with: " + "preference = [" + preference + "], value = [" + value + "]");
         String stringValue = value.toString();
         String key = preference.getKey();
 
@@ -120,6 +145,7 @@ public class SettingsActivity extends PreferenceActivity
                     // is valid
                     preference.setSummary(stringValue);
             }
+            refreshAttributions();
         } else {
             // For other preferences, set the summary to the value's simple string representation.
             preference.setSummary(stringValue);
@@ -127,21 +153,17 @@ public class SettingsActivity extends PreferenceActivity
 
     }
 
-    // This gets called before the preference is changed
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object value) {
-        setPreferenceSummary(preference, value);
-        return true;
-    }
-
     // This gets called after the preference is changed, which is important because we
     // start our synchronization here
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Log.d(TAG, "onSharedPreferenceChanged() called with: " + "sharedPreferences = [" + sharedPreferences + "], key = [" + key + "]");
         if (key.equals(getString(R.string.pref_location_key))) {
             // we've changed the location
             // first clear locationStatus
             Utility.resetLocationStatus(this);
+            Utility.resetLocationLatLong(this);
+
             SunshineSyncAdapter.syncImmediately(this);
         } else if (key.equals(getString(R.string.pref_units_key))) {
             // units have changed. update lists of weather entries accordingly
@@ -177,8 +199,10 @@ public class SettingsActivity extends PreferenceActivity
 
                 Utility.setPreferredLocation(this, address);
 
-                Utility.putLocationLatitude(this, (float) place.getLatLng().latitude);
-                Utility.putLocationLongitude(this, (float) place.getLatLng().longitude);
+                Utility.setLocationLatitude(this, (float) place.getLatLng().latitude);
+                Utility.setLocationLongitude(this, (float) place.getLatLng().longitude);
+
+                refreshAttributions();
 
                 Utility.resetLocationStatus(this);
                 SunshineSyncAdapter.syncImmediately(this);
@@ -187,5 +211,18 @@ public class SettingsActivity extends PreferenceActivity
         }
 
 
+    }
+
+    private void refreshAttributions() {
+        if (Utility.isLatLongAvailable(this)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                if (mAttribution != null) {
+                    mAttribution.setVisibility(Utility.isLatLongAvailable(this) ? View.VISIBLE : View.INVISIBLE);
+                }
+            } else {
+                View root = findViewById(android.R.id.content);
+                Snackbar.make(root, getString(R.string.attribution_text), Snackbar.LENGTH_LONG).show();
+            }
+        }
     }
 }

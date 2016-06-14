@@ -53,14 +53,14 @@ public class Utility {
     }
 
     @SuppressLint("CommitPrefEdits")
-    public static void putLocationLatitude(Context context, float lat) {
+    public static void setLocationLatitude(Context context, float lat) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
         editor.putFloat(context.getString(R.string.pref_location_latitude_key), lat);
         editor.commit();
     }
 
     @SuppressLint("CommitPrefEdits")
-    public static void putLocationLongitude(Context context, float lon) {
+    public static void setLocationLongitude(Context context, float lon) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
         editor.putFloat(context.getString(R.string.pref_location_longitude_key), lon);
         editor.commit();
@@ -74,6 +74,13 @@ public class Utility {
     public static float getLocationLongitude(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getFloat(context.getString(R.string.pref_location_longitude_key), DEFAULT_LAT_LONG);
+    }
+
+    public static void resetLocationLatLong(Context context) {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        editor.putFloat(context.getString(R.string.pref_location_latitude_key), DEFAULT_LAT_LONG);
+        editor.putFloat(context.getString(R.string.pref_location_longitude_key), DEFAULT_LAT_LONG);
+        editor.commit();
     }
 
     public static boolean isMetric(Context context) {
