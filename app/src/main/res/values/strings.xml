@@ -231,4 +231,5 @@
 
     <!--Attribution for Place Picker-->
     <string name="attribution_text">Powered by Google</string>
+    <string name="title_widget_today">Today</string>
 </resources>

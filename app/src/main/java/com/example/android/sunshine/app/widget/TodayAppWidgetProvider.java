@@ -1,26 +1,36 @@
 package com.example.android.sunshine.app.widget;
 
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.RemoteViews;
+import android.os.Bundle;
+import android.util.Log;
 
-import com.example.android.sunshine.app.MainActivity;
-import com.example.android.sunshine.app.R;
+import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
 
 public class TodayAppWidgetProvider extends AppWidgetProvider {
+    private static final String TAG = "TodayAppWidgetProvider";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        Log.d(TAG, "onUpdate() called with: " + "context = [" + context + "], appWidgetManager = [" + appWidgetManager + "], appWidgetIds = [" + appWidgetIds + "]");
+        Log.d(TAG, "onUpdate: starting widget service");
+        context.startService(new Intent(context, TodayWidgetService.class));
+    }
 
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_today_small);
+    @Override
+    public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
+        Log.d(TAG, "onAppWidgetOptionsChanged() called with: " + "context = [" + context + "], appWidgetManager = [" + appWidgetManager + "], appWidgetId = [" + appWidgetId + "], newOptions = [" + newOptions + "]");
+        context.startService(new Intent(context, TodayWidgetService.class));
+    }
 
-        Intent intent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-        views.setOnClickPendingIntent(R.id.widget, pendingIntent);
-
-        appWidgetManager.updateAppWidget(appWidgetIds, views);
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        Log.d(TAG, "onReceive() called with: " + "context = [" + context + "], intent = [" + intent + "]");
+        super.onReceive(context, intent);
+        if (intent.getAction().equals(SunshineSyncAdapter.ACTION_DATA_UPDATED)) {
+            context.startService(new Intent(context, TodayWidgetService.class));
+        }
     }
 }
