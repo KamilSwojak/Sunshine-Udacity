@@ -20,6 +20,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
@@ -91,6 +92,10 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
                 startService(intent);
             }
         }
+
+        if (getIntent().getData() != null) {
+            onItemSelected(getIntent().getData(), null);
+        }
     }
 
     @Override
@@ -135,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
     }
 
     @Override
-    public void onItemSelected(Uri contentUri, ForecastAdapter.ViewHolder holder) {
+    public void onItemSelected(Uri contentUri, @Nullable ForecastAdapter.ViewHolder holder) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
