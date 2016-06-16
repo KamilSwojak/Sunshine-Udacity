@@ -3,6 +3,6 @@
                     android:initialLayout="@layout/widget_today_small"
                     android:minHeight="40dp"
                     android:minWidth="40dp"
-                    android:previewImage="@drawable/widget_today_small_preview"
+                    android:previewImage="@drawable/widget_preview_today"
                     android:updatePeriodMillis="0">
 </appwidget-provider>
