@@ -21,7 +21,9 @@ android {
     buildTypes.each {
         it.buildConfigField 'String', 'OPEN_WEATHER_MAP_API_KEY', MyOpenWeatherMapApiKey
         it.buildConfigField 'String', 'GOOGLE_API_KEY', GoogleApiKey
+        it.buildConfigField 'String', 'GOOGLE_SERVER_KEY', GoogleServerKey
         it.resValue 'string', 'GOOGLE_API_KEY', GoogleApiKey
+        it.resValue 'string', 'GOOGLE_SERVER_KEY', GoogleServerKey
     }
 }
 
