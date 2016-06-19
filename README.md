@@ -3,29 +3,13 @@ Advanced Android Sample App
 
 Synchronizes weather information from OpenWeatherMap on Android Phones and Tablets. Used in the Udacity Advanced Android course.
 
-Pre-requisites
---------------
-Android SDK 21 or Higher
-Build Tools version 21.1.2
-Android Support AppCompat 22.2.0
-Android Support Annotations 22.2.0
-Android Support GridLayout 22.2.0
-Google Play Services GCM 7.0.0
-BumpTech Glide 3.5.2
+[Original repository](https://github.com/udacity/Advanced_Android_Development)
 
-Getting Started
----------------
-This sample uses the Gradle build system.  To build this project, use the
-"gradlew build" command or use "Import Project" in Android Studio.
-
-Support
--------
-
-- Google+ Community: https://plus.google.com/communities/105153134372062985968
-- Stack Overflow: http://stackoverflow.com/questions/tagged/android
-
-Patches are encouraged, and may be submitted by forking this project and
-submitting a pull request through GitHub. Please see CONTRIBUTING.md for more details.
+![Alt text](/../screenshots/screenshots/sc-port-phone.png?raw=true "Phone portrait view")
+![Alt text](/../screenshots/screenshots/sc-land-phone.png?raw=true "Phone landscape vew")
+![Alt text](/../screenshots/screenshots/sc-land-tablet.png?raw=true "Tablet landscape view")
+![Alt text](/../screenshots/screenshots/sc-port-tablet.png?raw=true "Tablet portrait view")
+![Alt text](/../screenshots/screenshots/sc-widgets.png?raw=true "Widgets")
 
 License
 -------
