@@ -11,7 +11,7 @@ Synchronizes weather information from OpenWeatherMap on Android Phones and Table
 
 Screens
 -------
-<img src="/../screenshots/screenshots/sc-port-phone.png" width="720">
+<img src="/../screenshots/screenshots/sc-port-phone.png" width="360">
 
 ![Alt text](/../screenshots/screenshots/sc-port-phone.png?raw=true "Phone portrait view")
 ![Alt text](/../screenshots/screenshots/sc-land-phone.png?raw=true "Phone landscape vew")
