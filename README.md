@@ -5,11 +5,17 @@ Synchronizes weather information from OpenWeatherMap on Android Phones and Table
 
 [Original repository](https://github.com/udacity/Advanced_Android_Development)
 
-![Alt text](/../screenshots/screenshots/sc-port-phone.png?raw=true "Phone portrait view")
-![Alt text](/../screenshots/screenshots/sc-land-phone.png?raw=true "Phone landscape vew")
-![Alt text](/../screenshots/screenshots/sc-land-tablet.png?raw=true "Tablet landscape view")
-![Alt text](/../screenshots/screenshots/sc-port-tablet.png?raw=true "Tablet portrait view")
-![Alt text](/../screenshots/screenshots/sc-widgets.png?raw=true "Widgets")
+[Course Part 1](https://www.udacity.com/course/developing-android-apps--ud853)
+
+[Course Part 2](https://www.udacity.com/course/advanced-android-app-development--ud855)
+
+Screens
+-------
+<img src="/../screenshots/screenshots/sc-port-phone.png" width="360">
+<img src="/../screenshots/screenshots/sc-land-phone.png" height="360">
+<img src="/../screenshots/screenshots/sc-port-tablet.png" height="360">
+<img src="/../screenshots/screenshots/sc-land-tablet.png" height="360">
+<img src="/../screenshots/screenshots/sc-widgets.png" height="360">
 
 License
 -------
