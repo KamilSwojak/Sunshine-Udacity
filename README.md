@@ -9,6 +9,10 @@ Synchronizes weather information from OpenWeatherMap on Android Phones and Table
 
 [Course Part 2](https://www.udacity.com/course/advanced-android-app-development--ud855)
 
+Screens
+-------
+<img src="/../screenshots/screenshots/sc-port-phone.png" width="48">
+
 ![Alt text](/../screenshots/screenshots/sc-port-phone.png?raw=true "Phone portrait view")
 ![Alt text](/../screenshots/screenshots/sc-land-phone.png?raw=true "Phone landscape vew")
 ![Alt text](/../screenshots/screenshots/sc-land-tablet.png?raw=true "Tablet landscape view")
