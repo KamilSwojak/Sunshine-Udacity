@@ -14,8 +14,8 @@ Screens
 
 <img src="/../screenshots/screenshots/sc-phone-list-port.png" width="360">
 <img src="/../screenshots/screenshots/sc-phone-detail-port.png" width="360">
-<img src="/../screenshots/screenshots/sc-phone-list-land.png" width="360">
-<img src="/../screenshots/screenshots/sc-phone-detail-land.png" width="360">
+<img src="/../screenshots/screenshots/sc-phone-list-land.png" height="360">
+<img src="/../screenshots/screenshots/sc-phone-detail-land.png" height="360">
 <img src="/../screenshots/screenshots/sc-tablet-port.png" width="360">
 <img src="/../screenshots/screenshots/sc-tablet-land.png" width="360">
 <img src="/../screenshots/screenshots/sc-widgets.png" width="360">
